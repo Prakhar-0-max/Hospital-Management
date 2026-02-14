@@ -30,48 +30,53 @@ const userSchema = new mongoose.Schema({
         minLength: [13, "NIC Must Contain Exact 13 Digit"],
         maxLength: [13, "NIC Must Contain Exact 13 Digit"]
     },
-     dob: {
+    dob: {
         type: Date,
         required: [true, "DOB is required"],
     },
-    gender:{
+    gender: {
         type: String,
         required: true,
-        enum: ["Male","Female"],
+        enum: ["Male", "Female"],
     },
-       password:{
+    password: {
         type: String,
         minLength: [8, "Password Must Contain at least 8 character"],
         required: true,
         select: false
     },
-    role:{
+    role: {
         type: String,
         required: true,
-        enum: ["Admin","Patient", "Doctor"],
+        enum: ["Admin", "Patient", "Doctor"],
     },
-    doctorDepartment:{
+    doctorDepartment: {
         type: String,
     },
-    docAvatar:{
+    doctorAvailability: {
+        type: String, // e.g. "Mon - Fri, 09:00 AM - 05:00 PM"
+        default: "Not Available"
+    },
+    docAvatar: {
         public_id: String,
         url: String,
     },
+
 })
-    userSchema.pre("save", async function(next){
-        if(!this.isModified("password")){
-            next();
-        }
-        this.password=await bcrypt.hash(this.password,10);
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) {
+        next();
+    }
+    this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods.comparePassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
+userSchema.methods.generateJsonWebToken = function () {
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+        expiresIn: process.env.JWT_EXPIRES,
     });
-
-    userSchema.methods.comparePassword=async function (enteredPassword){
-        return await bcrypt.compare(enteredPassword, this.password);
-    };
-
-    userSchema.methods.generateJsonWebToken = function() {
-        return jwt.sign({id: this._id},process.env.JWT_SECRET_KEY,{
-            expiresIn: process.env.JWT_EXPIRES,
-        });
-    };
+};
 export const User = mongoose.model("User", userSchema);  

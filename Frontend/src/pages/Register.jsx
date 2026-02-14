@@ -58,10 +58,7 @@ const Register = () => {
       <div className="container form-component register-form">
         <h2>Sign Up</h2>
         <p>Please Sign Up To Continue</p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat culpa
-          voluptas expedita itaque ex, totam ad quod error?
-        </p>
+       
         <form onSubmit={handleRegistration}>
           <div>
             <input
@@ -134,7 +131,7 @@ const Register = () => {
             </Link>
           </div>
           <div style={{ justifyContent: "center", alignItems: "center" }}>
-            <button type="submit">Register</button>
+            <button className="btn" type="submit">Register</button>
           </div>
         </form>
       </div>

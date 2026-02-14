@@ -9,6 +9,7 @@ import {errorMiddleware} from "./middlewares/errorMiddleware.js"
 import userRouter from "./router/userRouter.js"
 import appointmentRouter from "./router/appointmentRouter.js"
 
+
 const app = express()
 config({path: "./config/config.env"});
 
@@ -31,6 +32,8 @@ tempFileDir: "/tmp/",
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
+
+
 dbConnection(); 
 
 app.use(errorMiddleware);

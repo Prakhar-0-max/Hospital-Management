@@ -55,11 +55,11 @@ const appointmentSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        
+
     },
     hasVisited: {
         type: Boolean,
-       default: false,
+        default: false,
     },
     doctorId: {
         type: mongoose.Schema.ObjectId,
@@ -78,5 +78,9 @@ const appointmentSchema = new mongoose.Schema({
         enum: ["Pending", "Accepted", "Rejected"],
         default: "Pending",
     },
-})
-export const Appointment = mongoose.model("Appointment",appointmentSchema)
+}, {
+    timestamps: true
+});
+
+
+export const Appointment = mongoose.model("Appointment", appointmentSchema)

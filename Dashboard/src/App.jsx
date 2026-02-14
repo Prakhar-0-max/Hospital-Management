@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import {BrowserRouter as Router, Routes,Route,Navigate,} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import AddNewDoctor from "./components/AddNewDoctor";
@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "./components/Sidebar";
 import AddNewAdmin from "./components/AddNewAdmin";
+import Appointments from "./components/Appointment";
 import "./App.css";
 
 const App = () => {
@@ -46,8 +47,10 @@ const App = () => {
         <Route path="/admin/addnew" element={<AddNewAdmin />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/doctors" element={<Doctors />} />
+
+        <Route path="/appointments" element={<Appointments />} />
       </Routes>
-      <ToastContainer position="top-center" />
+      <ToastContainer position="top-center" theme="colored" />
     </Router>
   );
 };

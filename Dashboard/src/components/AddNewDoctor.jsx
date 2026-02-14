@@ -1,4 +1,3 @@
-
 import React, { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,8 +16,10 @@ const AddNewDoctor = () => {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
   const [doctorDepartment, setDoctorDepartment] = useState("");
+  const [docAvailability, setDocAvailability] = useState("");
   const [docAvatar, setDocAvatar] = useState("");
   const [docAvatarPreview, setDocAvatarPreview] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigateTo = useNavigate();
 
@@ -46,6 +47,7 @@ const AddNewDoctor = () => {
 
   const handleAddNewDoctor = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("firstName", firstName);
@@ -57,45 +59,55 @@ const AddNewDoctor = () => {
       formData.append("dob", dob);
       formData.append("gender", gender);
       formData.append("doctorDepartment", doctorDepartment);
+      formData.append("doctorAvailability", docAvailability);
       formData.append("docAvatar", docAvatar);
-      await axios
-        .post("http://localhost:4000/api/v1/user/doctor/addnew", formData, {
+
+      const { data } = await axios.post(
+        "http://localhost:4000/api/v1/user/doctor/addnew",
+        formData,
+        {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((res) => {
-          toast.success(res.data.message);
-          setIsAuthenticated(true);
-          navigateTo("/");
-          setFirstName("");
-          setLastName("");
-          setEmail("");
-          setPhone("");
-          setNic("");
-          setDob("");
-          setGender("");
-          setPassword("");
-        });
+        }
+      );
+
+      toast.success(data.message);
+      setIsAuthenticated(true);
+      navigateTo("/");
+
+
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPhone("");
+      setNic("");
+      setDob("");
+      setGender("");
+      setPassword("");
+      setDoctorDepartment("");
+      setDocAvailability("");
+      setDocAvatar("");
+      setDocAvatarPreview("");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />;
   }
+
   return (
     <section className="page">
       <section className="container add-doctor-form">
-        <img src="/logo.png" alt="logo" className="logo"/>
         <h1 className="form-title">REGISTER A NEW DOCTOR</h1>
         <form onSubmit={handleAddNewDoctor}>
           <div className="first-wrapper">
             <div>
               <img
-                src={
-                  docAvatarPreview ? `${docAvatarPreview}` : "/docHolder.jpg"
-                }
+                src={docAvatarPreview ? docAvatarPreview : "/docHolder.jpg"}
                 alt="Doctor Avatar"
               />
               <input type="file" onChange={handleAvatar} />
@@ -132,15 +144,12 @@ const AddNewDoctor = () => {
                 onChange={(e) => setNic(e.target.value)}
               />
               <input
-                type={"date"}
+                type="date"
                 placeholder="Date of Birth"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
               />
-              <select
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
+              <select value={gender} onChange={(e) => setGender(e.target.value)}>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -153,20 +162,24 @@ const AddNewDoctor = () => {
               />
               <select
                 value={doctorDepartment}
-                onChange={(e) => {
-                  setDoctorDepartment(e.target.value);
-                }}
+                onChange={(e) => setDoctorDepartment(e.target.value)}
               >
                 <option value="">Select Department</option>
-                {departmentsArray.map((depart, index) => {
-                  return (
-                    <option value={depart} key={index}>
-                      {depart}
-                    </option>
-                  );
-                })}
+                {departmentsArray.map((depart, index) => (
+                  <option value={depart} key={index}>
+                    {depart}
+                  </option>
+                ))}
               </select>
-              <button type="submit">Register New Doctor</button>
+              <input
+                type="text"
+                placeholder="Availability (e.g. Mon-Fri, 9am-5pm)"
+                value={docAvailability}
+                onChange={(e) => setDocAvailability(e.target.value)}
+              />
+              <button type="submit" disabled={loading}>
+                {loading ? "Registering..." : "Register New Doctor"}
+              </button>
             </div>
           </div>
         </form>

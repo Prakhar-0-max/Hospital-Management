@@ -72,7 +72,7 @@ const AppointmentForm = () => {
       );
       toast.success(data.message);
       navigateTo("/");
-      
+
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -81,7 +81,7 @@ const AppointmentForm = () => {
   return (
     <>
       <div className="container form-component appointment-form">
-        <h2>Appointment</h2>
+        <h2>Book Appointment</h2>
         <form onSubmit={handleAppointment}>
           <div>
             <input
@@ -225,7 +225,9 @@ const AppointmentForm = () => {
               style={{ flex: "none", width: "25px" }}
             />
           </div>
-          <button style={{ margin: "0 auto" }}>GET APPOINTMENT</button>
+          <button type="submit" style={{ cursor: "pointer" }}>
+            Book Appointment
+          </button>
         </form>
       </div>
     </>

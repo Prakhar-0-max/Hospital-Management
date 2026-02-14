@@ -30,17 +30,23 @@ export const isAdminAuthenticated = catchAsyncErrors(async (req, res, next) => {
 // Patient Middleware
 export const isPatientAuthenticated = catchAsyncErrors(async (req, res, next) => {
   const token = req.cookies.patientToken;
+  console.log(" Token from cookie:", token);
 
   if (!token) {
-    return next(new ErrorHandler("Patient is not authenticated!", 400));
+    return next(new ErrorHandler("Please Login First!", 400));
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  req.user = await User.findById(decoded.id);
+  console.log(" Decoded Token ID:", decoded.id);
 
-  if (!req.user) {
+  const user = await User.findById(decoded.id);
+  console.log(" Fetched User:", user);
+
+  if (!user) {
     return next(new ErrorHandler("User not found!", 404));
   }
+
+  req.user = user;
 
   if (req.user.role !== "Patient") {
     return next(

@@ -28,8 +28,10 @@ const Login = () => {
         .then((res) => {
           toast.success(res.data.message);
           setIsAuthenticated(true);
-          
           navigateTo("/");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
         });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -45,10 +47,7 @@ const Login = () => {
       <div className="container form-component login-form">
         <h2>Sign In</h2>
         <p>Please Login To Continue</p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat culpa
-          voluptas expedita itaque ex, totam ad quod error?
-        </p>
+        
         <form onSubmit={handleLogin}>
           <input
             type="text"
@@ -84,7 +83,7 @@ const Login = () => {
             </Link>
           </div>
           <div style={{ justifyContent: "center", alignItems: "center" }}>
-            <button type="submit">Login</button>
+            <button className="btnn" type="submit">Login</button>
           </div>
         </form>
       </div>

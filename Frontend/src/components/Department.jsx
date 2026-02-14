@@ -6,7 +6,7 @@ const Departments = () => {
   const departmentsArray = [
     {
       name: "Pediatrics",
-      imageUrl: "/departments/pedia.jpg",
+      imageUrl: "/departments/pedica.jpg",
     },
     {
       name: "Orthopedics",
